@@ -12,6 +12,9 @@ plugins {
 repositories {
     google()
     mavenCentral()
+    maven {
+        url kotlin_repo_url
+    }
     maven { url = "https://jitpack.io" }
 }
 
