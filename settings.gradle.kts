@@ -1,8 +1,19 @@
 pluginManagement {
+    val kotlin_repo_url: String? by settings
     repositories {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
+        kotlin_repo_url?.also { maven(it) }
+    }
+    resolutionStrategy {
+        // TODO try to find another plugin for this functionality?
+        eachPlugin {
+            if (requested.id.id == "app.brant.amazonappstorepublisher") {
+                useModule("com.github.BrantApps.gradle-amazon-app-store-publisher:amazonappstorepublisher:master-SNAPSHOT")
+            }
+        }
     }
 }
 plugins {
