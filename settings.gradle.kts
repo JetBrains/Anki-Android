@@ -4,8 +4,8 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-        maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
         kotlin_repo_url?.also { maven(it) }
+        maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
     }
     resolutionStrategy {
         // TODO try to find another plugin for this functionality?
@@ -27,16 +27,18 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-dependencyResolutionManagement {
-    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
-    //  which uses a local maven repository
-    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-    }
-}
+//dependencyResolutionManagement {
+//    val kotlin_repo_url: String? by settings
+//    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
+//    //  which uses a local maven repository
+////     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositories {
+//        google()
+//        mavenCentral()
+//        kotlin_repo_url?.also { maven(it) }
+//        maven(url = "https://jitpack.io")
+//    }
+//}
 
 // alphabetical ordering rather than dependency-tree ordering to avoid bikeshedding
 include(
