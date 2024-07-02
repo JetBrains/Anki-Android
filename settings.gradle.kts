@@ -4,8 +4,8 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-        maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
         kotlin_repo_url?.also { maven(it) }
+        maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
     }
     resolutionStrategy {
         // TODO try to find another plugin for this functionality?
@@ -17,15 +17,17 @@ pluginManagement {
     }
 }
 
-dependencyResolutionManagement {
-    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
-    //  which uses a local maven repository
-    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-    }
-}
+//dependencyResolutionManagement {
+//    val kotlin_repo_url: String? by settings
+//    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
+//    //  which uses a local maven repository
+////     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositories {
+//        google()
+//        mavenCentral()
+//        kotlin_repo_url?.also { maven(it) }
+//        maven(url = "https://jitpack.io")
+//    }
+//}
 
 include(":lint-rules", ":api", ":AnkiDroid", ":testlib", ":common", ":libanki", ":libanki:testutils", ":vbpd")
