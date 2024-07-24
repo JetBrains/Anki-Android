@@ -4,6 +4,7 @@ import com.android.build.api.extension.impl.AndroidComponentsExtensionImpl
 import com.slack.keeper.optInToKeeper
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.internal.jvm.Jvm
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -13,6 +14,27 @@ import kotlin.time.Duration.Companion.milliseconds
 
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+val kotlin_language_version: String by project
+val kotlin_api_version: String by project
+buildscript {
+    val kotlin_version: String by project
+    val kotlin_repo_url: String by project
+    repositories {
+        repositories {
+            google()
+            mavenCentral()
+            kotlin_repo_url.also { maven(it) }
+            maven(url = "https://jitpack.io")
+        }
+        plugins {
+            id("org.jetbrains.kotlin.android") version kotlin_version apply false
+            id("org.jetbrains.kotlin.plugin.parcelize") version kotlin_version apply false
+            id("org.jetbrains.kotlin.jvm") version kotlin_version apply false
+            id("org.jetbrains.kotlin.plugin.serialization") version kotlin_version apply false
+        }
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -21,7 +43,21 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ktlint.gradle.plugin) apply false
+//    alias(libs.plugins.kotlin.android) apply false //
+//    alias(libs.plugins.kotlin.parcelize) apply false //
+//    alias(libs.plugins.kotlin.jvm) apply false //
+//    alias(libs.plugins.kotlin.serialization) apply false //
     alias(libs.plugins.keeper) apply false
+}
+
+allprojects {
+    val kotlin_repo_url: String by project
+    repositories {
+        google()
+        mavenCentral()
+        kotlin_repo_url.also { maven(it) }
+        maven(url = "https://jitpack.io")
+    }
 }
 
 val localProperties = java.util.Properties()
@@ -103,7 +139,7 @@ subprojects {
          */
         tasks.withType(KotlinCompile::class.java).configureEach {
             compilerOptions {
-                allWarningsAsErrors = fatalWarnings
+//                allWarningsAsErrors = fatalWarnings
                 val compilerArgs = mutableListOf(
                     "-Xjvm-default=all",
                     // https://youtrack.jetbrains.com/issue/KT-73255
@@ -114,6 +150,10 @@ subprojects {
                     compilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 }
                 freeCompilerArgs = compilerArgs
+                languageVersion.set(KotlinVersion.fromVersion(kotlin_language_version))
+                logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Language version: ${languageVersion.get().version} for project ${project.name} ")
+                apiVersion.set(KotlinVersion.fromVersion(kotlin_api_version))
+                logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Api version: ${apiVersion.get().version} for project ${project.name} ")
             }
         }
     }
