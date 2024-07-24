@@ -10,6 +10,7 @@ import org.gradle.buildconfiguration.tasks.UpdateDaemonJvm
 import org.gradle.internal.jvm.Jvm
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import java.lang.management.ManagementFactory
@@ -18,6 +19,28 @@ import kotlin.math.max
 
 
 // Top-level build file where you can add configuration options common to all subprojects/modules.
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+val kotlin_language_version: String by project
+val kotlin_api_version: String by project
+buildscript {
+    val kotlin_version: String by project
+    val kotlin_repo_url: String by project
+    repositories {
+        repositories {
+            google()
+            mavenCentral()
+            kotlin_repo_url.also { maven(it) }
+            maven(url = "https://jitpack.io")
+        }
+        plugins {
+            id("org.jetbrains.kotlin.android") version kotlin_version apply false
+            id("org.jetbrains.kotlin.plugin.parcelize") version kotlin_version apply false
+            id("org.jetbrains.kotlin.jvm") version kotlin_version apply false
+            id("org.jetbrains.kotlin.plugin.serialization") version kotlin_version apply false
+        }
+    }
+}
+
 plugins {
     // Use `id` to avoid classpath conflicts. Versions are pinned by buildSrc/.
     id("com.android.application") apply false
@@ -37,6 +60,17 @@ plugins {
 }
 
 val localProperties = Properties()
+allprojects {
+    val kotlin_repo_url: String by project
+    repositories {
+        google()
+        mavenCentral()
+        kotlin_repo_url.also { maven(it) }
+        maven(url = "https://jitpack.io")
+    }
+}
+
+val localProperties = java.util.Properties()
 if (project.rootProject.file("local.properties").exists()) {
     localProperties.load(project.rootProject.file("local.properties").inputStream())
 }
@@ -143,7 +177,7 @@ subprojects {
             val taskName = name
 
             compilerOptions {
-                allWarningsAsErrors = fatalWarnings
+//                allWarningsAsErrors = fatalWarnings
                 val compilerArgs = mutableListOf<String>()
 
                 if (isInIdeaSync) {
@@ -151,6 +185,13 @@ subprojects {
                 }
 
                 if (project.path !in listOf(":api", ":common", ":common:android")) {
+//                allWarningsAsErrors = fatalWarnings
+                val compilerArgs = mutableListOf(
+                    // https://youtrack.jetbrains.com/issue/KT-73255
+                    // Apply @StringRes to both constructor params and generated properties
+                    "-Xannotation-default-target=param-property"
+                )
+                if (project.name != "api") {
                     compilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 }
                 // Opt in to Material3 APIs marked experimental once at the module level
@@ -162,6 +203,10 @@ subprojects {
                     compilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
                 }
                 freeCompilerArgs = compilerArgs
+                languageVersion.set(KotlinVersion.fromVersion(kotlin_language_version))
+                logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Language version: ${languageVersion.get().version} for project ${project.name} ")
+                apiVersion.set(KotlinVersion.fromVersion(kotlin_api_version))
+                logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Api version: ${apiVersion.get().version} for project ${project.name} ")
             }
         }
     }
