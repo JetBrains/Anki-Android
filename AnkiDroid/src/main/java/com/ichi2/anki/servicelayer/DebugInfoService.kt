@@ -21,7 +21,6 @@ import android.os.Build
 import com.ichi2.anki.BuildConfig
 import com.ichi2.anki.CollectionManager
 import com.ichi2.anki.CrashReportService
-import com.ichi2.utils.VersionUtils.pkgVersionName
 import com.ichi2.utils.getWebviewUserAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,8 +38,8 @@ object DebugInfoService {
         val webviewUserAgent = withContext(Dispatchers.Main) { getWebviewUserAgent(info) }
         // isFSRSEnabled is null on startup
         val isFSRSEnabled = getFSRSStatus()
+//        AnkiDroid Version = $pkgVersionName (${BuildConfig.GIT_COMMIT_HASH})
         return """
-            AnkiDroid Version = $pkgVersionName (${BuildConfig.GIT_COMMIT_HASH})
             Backend Version = ${BuildConfig.BACKEND_VERSION} (${BackendBuildConfig.ANKI_DESKTOP_VERSION} ${BackendBuildConfig.ANKI_COMMIT_HASH})
             Android Version = ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})
             ProductFlavor = ${BuildConfig.FLAVOR}
