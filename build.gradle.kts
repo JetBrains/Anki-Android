@@ -140,16 +140,24 @@ subprojects {
                     "-Xjvm-default=all",
                     // https://youtrack.jetbrains.com/issue/KT-73255
                     // Apply @StringRes to both constructor params and generated properties
-                    "-Xannotation-default-target=param-property"
+                    "-Xannotation-default-target=param-property",
+                    "-Xreport-all-warnings",
+                    "-Xrender-internal-diagnostic-names",
+                    "-Wextra",
+                    "-Xuse-fir-experimental-checkers"
                 )
                 if (project.name != "api") {
                     compilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 }
                 freeCompilerArgs = compilerArgs
+                project.findProperty("kotlin_additional_cli_options")?.let {
+                    freeCompilerArgs.addAll((it as String).trim().split(" ").toList())
+                }
                 languageVersion.set(KotlinVersion.fromVersion(kotlin_language_version))
                 logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Language version: ${languageVersion.get().version} for project ${project.name} ")
                 apiVersion.set(KotlinVersion.fromVersion(kotlin_api_version))
                 logger.info("[COMMUNITY_PROJECT_BUILD] Configured Kotlin Api version: ${apiVersion.get().version} for project ${project.name} ")
+                allWarningsAsErrors.set(false)
             }
         }
     }
