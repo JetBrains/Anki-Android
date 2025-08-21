@@ -143,8 +143,6 @@ subprojects {
                     "-Xannotation-default-target=param-property",
                     "-Xreport-all-warnings",
                     "-Xrender-internal-diagnostic-names",
-                    "-Wextra",
-                    "-Xuse-fir-experimental-checkers"
                 )
                 if (project.name != "api") {
                     compilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
