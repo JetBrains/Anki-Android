@@ -17,17 +17,22 @@ pluginManagement {
     }
 }
 
-//dependencyResolutionManagement {
-//    val kotlin_repo_url: String? by settings
-//    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
-//    //  which uses a local maven repository
-////     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+dependencyResolutionManagement {
+    val kotlin_version: String by settings
+    versionCatalogs {
+        create("libs") {
+            version("kotlin", kotlin_version)
+        }
+    }
+    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
+    //  which uses a local maven repository
+//     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 //    repositories {
 //        google()
 //        mavenCentral()
 //        kotlin_repo_url?.also { maven(it) }
 //        maven(url = "https://jitpack.io")
 //    }
-//}
+}
 
 include(":lint-rules", ":api", ":AnkiDroid", ":testlib", ":common", ":libanki", ":libanki:testutils", ":vbpd")

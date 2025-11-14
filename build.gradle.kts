@@ -17,32 +17,15 @@ import kotlin.time.Duration.Companion.milliseconds
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 val kotlin_language_version: String by project
 val kotlin_api_version: String by project
-buildscript {
-    val kotlin_version: String by project
-    val kotlin_repo_url: String by project
-    repositories {
-        repositories {
-            google()
-            mavenCentral()
-            kotlin_repo_url.also { maven(it) }
-            maven(url = "https://jitpack.io")
-        }
-        plugins {
-            id("org.jetbrains.kotlin.android") version kotlin_version apply false
-            id("org.jetbrains.kotlin.plugin.parcelize") version kotlin_version apply false
-            id("org.jetbrains.kotlin.jvm") version kotlin_version apply false
-            id("org.jetbrains.kotlin.plugin.serialization") version kotlin_version apply false
-        }
-    }
-}
+val kotlin_repo_url: String by project
 
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-//    alias(libs.plugins.kotlin.android) apply false
-//    alias(libs.plugins.kotlin.parcelize) apply false
-//    alias(libs.plugins.kotlin.jvm) apply false
-//    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ktlint.gradle.plugin) apply false
     alias(libs.plugins.keeper) apply false
 }
