@@ -22,24 +22,7 @@ import kotlin.math.max
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 val kotlin_language_version: String by project
 val kotlin_api_version: String by project
-buildscript {
-    val kotlin_version: String by project
-    val kotlin_repo_url: String by project
-    repositories {
-        repositories {
-            google()
-            mavenCentral()
-            kotlin_repo_url.also { maven(it) }
-            maven(url = "https://jitpack.io")
-        }
-        plugins {
-            id("org.jetbrains.kotlin.android") version kotlin_version apply false
-            id("org.jetbrains.kotlin.plugin.parcelize") version kotlin_version apply false
-            id("org.jetbrains.kotlin.jvm") version kotlin_version apply false
-            id("org.jetbrains.kotlin.plugin.serialization") version kotlin_version apply false
-        }
-    }
-}
+val kotlin_repo_url: String by project
 
 plugins {
     // Use `id` to avoid classpath conflicts. Versions are pinned by buildSrc/.
