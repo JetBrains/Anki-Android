@@ -137,7 +137,8 @@ subprojects {
 
 val jvmVersion = Jvm.current().javaVersion?.majorVersion.parseIntOrDefault(defaultValue = 0)
 val minSdk = libs.versions.minSdk.get()
-val jvmVersionLowerBound = 21
+// lowered jvmVersionLowerBound temporary as we do not have compatible Docker images yet
+val jvmVersionLowerBound = 17
 val jvmVersionUpperBound = 25
 if (jvmVersion !in jvmVersionLowerBound..jvmVersionUpperBound) {
     println("\n\n\n")
