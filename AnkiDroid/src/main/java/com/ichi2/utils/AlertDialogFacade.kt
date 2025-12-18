@@ -89,8 +89,9 @@ fun AlertDialog.Builder.message(
  */
 fun AlertDialog.Builder.iconAttr(
     @DrawableRes res: Int,
-) = apply {
-    return this.setIcon(Themes.getResFromAttr(this.context, res))
+): AlertDialog.Builder {
+    setIcon(Themes.getResFromAttr(this.context, res))
+    return this
 }
 
 fun AlertDialog.Builder.positiveButton(
