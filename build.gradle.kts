@@ -23,6 +23,7 @@ import kotlin.math.max
 val kotlin_language_version: String by project
 val kotlin_api_version: String by project
 val kotlin_repo_url: String by project
+val kotlin_version: String by project
 
 plugins {
     // Use `id` to avoid classpath conflicts. Versions are pinned by buildSrc/.
@@ -44,11 +45,19 @@ plugins {
 
 val localProperties = Properties()
 allprojects {
-    val kotlin_repo_url: String by project
     repositories {
         google()
         mavenCentral()
-        kotlin_repo_url.also { maven(it) }
+        if (!kotlin_repo_url.isNullOrEmpty() && !kotlin_version.isNullOrEmpty()) {
+            exclusiveContent {
+                forRepository {
+                    maven(kotlin_repo_url!!)
+                }
+                filter {
+                    includeVersionByRegex("org.jetbrains.kotlin", ".*", kotlin_version!!)
+                }
+            }
+        }
         maven(url = "https://jitpack.io")
     }
 }
