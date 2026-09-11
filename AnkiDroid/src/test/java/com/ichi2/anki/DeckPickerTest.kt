@@ -1391,11 +1391,8 @@ fun RobolectricTest.deckPicker(
     function: suspend DeckPicker.() -> Unit,
 ) = runTest {
     setIntroductionSlidesShown(skipIntroduction)
-    val deckPicker =
-        startActivityNormallyOpenCollectionWithIntent(
-            if (exposeTestData) DeckPickerTest.DeckPickerEx::class.java else DeckPicker::class.java,
-            Intent(),
-        )
+    val deckPickerClass = if (exposeTestData) DeckPickerTest.DeckPickerEx::class.java else DeckPicker::class.java
+    val deckPicker = startActivityNormallyOpenCollectionWithIntent(deckPickerClass, Intent())
     function(deckPicker)
 }
 
