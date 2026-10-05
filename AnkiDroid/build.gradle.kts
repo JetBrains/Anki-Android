@@ -21,12 +21,6 @@ plugins {
     id("idea")
 }
 
-repositories {
-    google()
-    mavenCentral()
-    maven { url = uri("https://jitpack.io") }
-}
-
 keeper {
     traceReferences {
         // Silence missing definitions
@@ -468,7 +462,7 @@ tasks.register<Copy>("installGitHook") {
     }
 }
 // to run manually: `./gradlew installGitHook`
-tasks.named("preBuild").configure { dependsOn("installGitHook") }
+// tasks.named("preBuild").configure { dependsOn("installGitHook") }
 
 // Fail fast when an emulator's primary user (user 0) is still locked after boot.
 //

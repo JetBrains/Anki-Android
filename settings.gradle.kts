@@ -33,20 +33,24 @@ plugins {
 
 dependencyResolutionManagement {
     val kotlin_version: String by settings
+    val kotlin_repo_url: String by settings
     versionCatalogs {
         create("libs") {
             version("kotlin", kotlin_version)
         }
     }
-    // TODO enforce repositories declared here, currently it clashes with robolectricDownloader.gradle
-    //  which uses a local maven repository
-//     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-//    repositories {
-//        google()
-//        mavenCentral()
-//        kotlin_repo_url?.also { maven(it) }
-//        maven(url = "https://jitpack.io")
-//    }
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        exclusiveContent {
+            forRepository { maven(kotlin_repo_url) }
+            filter {
+                includeVersionByRegex("org.jetbrains.kotlin", ".*", kotlin_version)
+            }
+        }
+        maven(url = "https://jitpack.io")
+    }
 }
 
 // alphabetical ordering rather than dependency-tree ordering to avoid bikeshedding
