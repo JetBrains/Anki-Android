@@ -17,14 +17,7 @@ pluginManagement {
         }
         maven(url = "https://jitpack.io") // only needed for the "amazonappstorepublisher" plugin
     }
-    resolutionStrategy {
-        // TODO try to find another plugin for this functionality?
-        eachPlugin {
-            if (requested.id.id == "app.brant.amazonappstorepublisher") {
-                useModule("com.github.BrantApps.gradle-amazon-app-store-publisher:amazonappstorepublisher:master-SNAPSHOT")
-            }
-        }
-    }
+
 }
 plugins {
     // Added automatically by Android Studio for Gradle Daemon JVM Criteria
@@ -34,6 +27,7 @@ plugins {
 
     // https://github.com/gradle/foojay-toolchains
     // Changelog: https://plugins.gradle.org/plugin/org.gradle.toolchains.foojay-resolver-convention
+    id("com.gradle.develocity") version ("4.3.3")
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 

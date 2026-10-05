@@ -1,11 +1,37 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Expose the root project's version catalog so buildSrc can reference
-// `libs.plugins.*` / `libs.versions.*` the same way the rest of the build does.
+import java.util.Properties
+
+val rootGradleProperties =
+    Properties().apply {
+        file("../gradle.properties").inputStream().use { load(it) }
+    }
+val kotlinVersion =
+    rootGradleProperties.getProperty("kotlin_version")
+        ?: error("kotlin_version is missing from the root gradle.properties")
+val kotlinRepoUrl = rootGradleProperties.getProperty("kotlin_repo_url")?.takeIf { it.isNotBlank() }
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             from(files("../gradle/libs.versions.toml"))
+            version("kotlin", kotlinVersion)
+        }
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        if (kotlinRepoUrl != null) {
+            exclusiveContent {
+                forRepository {
+                    maven(kotlinRepoUrl)
+                }
+                filter {
+                    includeVersionByRegex("org.jetbrains.kotlin.*", ".*", kotlinVersion)
+                }
+            }
         }
     }
 }

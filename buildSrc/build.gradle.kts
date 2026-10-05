@@ -7,12 +7,6 @@ plugins {
     alias(libs.plugins.ktlint.gradle.plugin)
 }
 
-repositories {
-    google()
-    mavenCentral()
-    gradlePluginPortal()
-}
-
 dependencies {
     // Needed by precompiled script plugins that apply `com.android.library`.
     // Pins AGP/KGP transitively, so call sites need `id("com.android.library")` etc. with no version.
